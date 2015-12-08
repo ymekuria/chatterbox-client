@@ -108,7 +108,12 @@ app.addRoom = function (name) {
 };
 
 app.addFriend = function (username) {
-  friends.push(username);
+  if( !_.contains(friends, username) ) {
+    friends.push(username);
+    
+  } else {
+    friends.splice(friends.indexOf(username),1);
+  }
 };
 
 app.handleSubmit = function () {
