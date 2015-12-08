@@ -16,15 +16,8 @@ app.init = function () {
       app.addFriend();
     });
 
-  $('.submit').click(function (event) {
-    var message = {
-      username: 'what',
-      text: $('.input').val(),
-      roomname: rooms[$('.rooms').val()]
-    };
-    debugger;
-    alert(message);
-    //app.send()
+  $('form').on('submit', function () {
+    app.handleSubmit();
   })
 
 
@@ -77,7 +70,6 @@ app.send = function (messageObj) {
     contentType: 'application/json',
     success: function (data) {
       console.log('chatterBox: message sent', data)
-
     },
     error: function (data) {
       console.log('chatterbox: Failed to send')
@@ -107,9 +99,14 @@ app.addFriend = function (username) {
   friends.push(username);
 };
 
-app.handelSubmit = function () {
-  
-}
+app.handleSubmit = function () {
+  var message = {
+    username: 'Yoni',
+    text: $('.message').val(),
+    roomname: rooms[$('.rooms').val()]
+  };
+  app.send(message);
+};
 
 
 
