@@ -18,10 +18,15 @@
       <h1>chatterbox</h1>
         <label>Rooms:</label>
         <select class="rooms">
+            <option default>Select Your Room</option>
         </select>
         <form id="send">
-            <input id="message"  type= "text"> </input>
-            <input class="submit" type="submit" value="Submit">
+            <input id="message"  placeholder="Send a Message" type = "text"> </input>
+            <input class="submit" type="submit" value="Send">
+        </form>
+        <form id="addRoom">
+            <input id="roomName" placeholder="Add a room"  type= "text"></input>
+            <input class="roomSubmit" type="submit" value=" Add ">
         </form>
 
       <!-- Your HTML goes here! -->

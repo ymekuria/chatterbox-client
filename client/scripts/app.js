@@ -5,6 +5,7 @@ var message = {
   roomname: '4chan'
 };
 
+var messages;
 var app = {};
 var friends = [];
 var rooms = [];
@@ -17,6 +18,12 @@ $(document).ready(function () {
   $('form').on('submit', function () {
     app.handleSubmit();
   })
+
+  $('select').change(function (data) {
+    var room = rooms[$(this).val()];
+    //console.log(data);
+    displayMessages(room);
+  });
 });
 app.init = function () {
   app.server = 'https://api.parse.com/1/classes/chatterbox';
@@ -29,8 +36,9 @@ app.fetch = function () {
     type: 'GET',
     contentType: 'application/json',
     success: function (data) {
-      console.log('chatterBox: message retrieved', data);
-      displayMessages(data);
+      messages = data.results;
+      console.log('chatterBox: message retrieved', data.results);
+      displayMessages();
     },
     error: function (data) {
       console.error('chatterbox: Failed to retrieve message')
@@ -39,19 +47,25 @@ app.fetch = function () {
 };
 
 
-var displayMessages = function (data) {
-  var messages = data.results;
+var displayMessages = function (room) {
 
+  $('#main span').remove();
   for (var i = 0; i < messages.length; i++) {
-    var messageContainer = $('<span> <div class="message"></div> <div class="username" data-username=' + messages[i].username + ' >' + messages[i].username + '</div></span>');
-    messageContainer.find('.message').text(messages[i].text);
-    $('form').after(messageContainer);
+    if(arguments.length === 0){
+      room = messages[i].roomname;
+    }
+    if (room === messages[i].roomname) {
+      var messageContainer = $('<span> <div class="message"></div> <div class="username" data-username=' + messages[i].username + ' >' + messages[i].username + '</div></span>');
+      messageContainer.find('.message').text(messages[i].text);
+      $('#addRoom').after(messageContainer);
 
-    if (!_.contains(rooms, messages[i].roomname)) {
-      rooms.push(messages[i].roomname);
+      if (!_.contains(rooms, messages[i].roomname)) {
+        rooms.push(messages[i].roomname);
+      }
     }
   }
 
+  $('select').empty();
   for (var i = 0; i < rooms.length; i++) {
     $('.rooms').append('<option class=' + 'room' + i + ' value=' + i + '> </option>');
     $('.rooms').find('.' + 'room' + i).text(rooms[i]);
@@ -104,9 +118,8 @@ app.handleSubmit = function () {
     roomname: rooms[$('.rooms').val()]
   };
 
-  console.log('message in handleSubmit', message)
-  app.send(message);
 };
+
 
 
 
