@@ -82,3 +82,22 @@ form input[type=text] {
 .spinner img {
     padding: 10px;
 }
+
+#main span {
+    margin-bottom: 5px;
+    display: block;
+    background-color: #eeeeee;
+    padding-left: 10px;
+
+}
+
+.username {
+    font-size: small;
+    color: blueviolet;
+    padding-left: 15px;
+}
+
+.username:hover {
+    font-style:italic;
+    color: blue;
+}

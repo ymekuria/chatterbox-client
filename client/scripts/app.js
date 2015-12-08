@@ -9,26 +9,23 @@ var app = {};
 var friends = [];
 var rooms = [];
 
-app.init = function () {
-
-  $(document).ready(function () {
-    $('body #main').on('click', '.username', function () {
-      app.addFriend();
-    });
+$(document).ready(function () {
+  $('body #main').on('click', '.username', function () {
+    app.addFriend();
+  });
 
   $('form').on('submit', function () {
     app.handleSubmit();
   })
-
-
-  })
-
-
+});
+app.init = function () {
+  app.server = 'https://api.parse.com/1/classes/chatterbox';
+  app.fetch();
 };
 
-app.fetch = function (url) {
+app.fetch = function () {
   $.ajax({
-    url: url,
+    url: app.server,
     type: 'GET',
     contentType: 'application/json',
     success: function (data) {
@@ -50,13 +47,13 @@ var displayMessages = function (data) {
     messageContainer.find('.message').text(messages[i].text);
     $('form').after(messageContainer);
 
-    if(!_.contains(rooms, messages[i].roomname)){
+    if (!_.contains(rooms, messages[i].roomname)) {
       rooms.push(messages[i].roomname);
     }
   }
 
-  for(var i = 0; i < rooms.length; i++){
-    $('.rooms').append('<option class='+ 'room' + i +' value='+ i +'> </option>');
+  for (var i = 0; i < rooms.length; i++) {
+    $('.rooms').append('<option class=' + 'room' + i + ' value=' + i + '> </option>');
     $('.rooms').find('.' + 'room' + i).text(rooms[i]);
   }
 };
@@ -69,6 +66,7 @@ app.send = function (messageObj) {
     data: JSON.stringify(messageObj),
     contentType: 'application/json',
     success: function (data) {
+      debugger;
       console.log('chatterBox: message sent', data)
     },
     error: function (data) {
@@ -102,9 +100,11 @@ app.addFriend = function (username) {
 app.handleSubmit = function () {
   var message = {
     username: 'Yoni',
-    text: $('.message').val(),
+    text: $('#message').val(),
     roomname: rooms[$('.rooms').val()]
   };
+
+  console.log('message in handleSubmit', message)
   app.send(message);
 };
 
