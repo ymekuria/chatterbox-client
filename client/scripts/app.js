@@ -7,6 +7,7 @@ var message = {
 
 var app = {};
 var friends = [];
+var rooms = [];
 
 app.init = function () {
 
@@ -14,6 +15,19 @@ app.init = function () {
     $('body #main').on('click', '.username', function () {
       app.addFriend();
     });
+
+  $('.submit').click(function (event) {
+    var message = {
+      username: 'what',
+      text: $('.input').val(),
+      roomname: rooms[$('.rooms').val()]
+    };
+    debugger;
+    alert(message);
+    //app.send()
+  })
+
+
   })
 
 
@@ -40,10 +54,17 @@ var displayMessages = function (data) {
 
   for (var i = 0; i < messages.length; i++) {
     var messageContainer = $('<span> <div class="message"></div> <div class="username" data-username=' + messages[i].username + ' >' + messages[i].username + '</div></span>');
-    console.log(messageContainer);
     messageContainer.find('.message').text(messages[i].text);
-    console.log(messageContainer);
-    $('body #main h1').after(messageContainer);
+    $('form').after(messageContainer);
+
+    if(!_.contains(rooms, messages[i].roomname)){
+      rooms.push(messages[i].roomname);
+    }
+  }
+
+  for(var i = 0; i < rooms.length; i++){
+    $('.rooms').append('<option class='+ 'room' + i +' value='+ i +'> </option>');
+    $('.rooms').find('.' + 'room' + i).text(rooms[i]);
   }
 };
 
@@ -85,6 +106,10 @@ app.addRoom = function (name) {
 app.addFriend = function (username) {
   friends.push(username);
 };
+
+app.handelSubmit = function () {
+  
+}
 
 
 
