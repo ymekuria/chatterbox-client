@@ -6,8 +6,16 @@ var message = {
 };
 
 var app = {};
+var friends = [];
 
 app.init = function () {
+
+  $(document).ready(function () {
+    $('body #main').on('click', '.username', function () {
+      app.addFriend();
+    });
+  })
+
 
 };
 
@@ -31,7 +39,10 @@ var displayMessages = function (data) {
   var messages = data.results;
 
   for (var i = 0; i < messages.length; i++) {
-    var messageContainer = $('<div class="message"></div>').text(messages[i].text);
+    var messageContainer = $('<span> <div class="message"></div> <div class="username" data-username=' + messages[i].username + ' >' + messages[i].username + '</div></span>');
+    console.log(messageContainer);
+    messageContainer.find('.message').text(messages[i].text);
+    console.log(messageContainer);
     $('body #main h1').after(messageContainer);
   }
 };
@@ -48,10 +59,31 @@ app.send = function (messageObj) {
 
     },
     error: function (data) {
-       console.log('chatterbox: Failed to send')
+      console.log('chatterbox: Failed to send')
     }
 
   })
+};
+
+app.addMessage = function (message) {
+
+  var messageContainer = $('<span> <div class="message"></div> <div class="username" data-username=' + message.username + ' >' + message.username + '</div></span>');
+  console.log(messageContainer);
+  messageContainer.find('.message').text(message.text);
+  console.log(messageContainer);
+  $('#chats').prepend(messageContainer);
+};
+
+app.clearMessages = function () {
+  $('#chats').empty();
+};
+
+app.addRoom = function (name) {
+  $('#roomSelect').prepend('<div> ' + name + '</div>');
+};
+
+app.addFriend = function (username) {
+  friends.push(username);
 };
 
 
