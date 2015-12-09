@@ -12,7 +12,9 @@ var rooms = [];
 
 $(document).ready(function () {
   $('body #main').on('click', '.username', function () {
-    app.addFriend();
+    var username = $(this).text()
+    console.log('username', username);
+    app.addFriend(username);
   });
 
   $('form').on('submit', function () {
@@ -37,7 +39,7 @@ app.fetch = function () {
     contentType: 'application/json',
     success: function (data) {
       messages = data.results;
-      console.log('chatterBox: message retrieved', data.results);
+      console.log('chatterBox: message retrieved');
       displayMessages();
     },
     error: function (data) {
@@ -81,7 +83,7 @@ app.send = function (messageObj) {
     contentType: 'application/json',
     success: function (data) {
       debugger;
-      console.log('chatterBox: message sent', data)
+      //console.log('chatterBox: message sent', data)
     },
     error: function (data) {
       console.log('chatterbox: Failed to send')
@@ -95,7 +97,7 @@ app.addMessage = function (message) {
   var messageContainer = $('<span> <div class="message"></div> <div class="username" data-username=' + message.username + ' >' + message.username + '</div></span>');
   console.log(messageContainer);
   messageContainer.find('.message').text(message.text);
-  console.log(messageContainer);
+  //console.log(messageContainer);
   $('#chats').prepend(messageContainer);
 };
 
@@ -114,7 +116,26 @@ app.addFriend = function (username) {
   } else {
     friends.splice(friends.indexOf(username),1);
   }
+
+  app.highlightFriends();
 };
+app.highlightFriends =function () {
+  var $displayedMessages = $('span');
+
+
+  $displayedMessages.each(function (index, value) {
+    var username = $(value).find('.username').text()
+    
+    if( _.contains( friends, username )) { 
+      $(value).css("font-weight","Bold");
+
+    } else {
+      $(value).css("font-weight","normal");      
+    }
+
+  });  
+
+}
 
 app.handleSubmit = function () {
   var message = {
